@@ -17,7 +17,7 @@ const (
 
 type TransactionRepositoryInterface interface {
 	Register(transaction *Transaction)
-	Save(transaction *Transaction)
+	Save(transaction *Transaction) error
 	Find(id string) (*Transaction, error)
 }
 
@@ -28,11 +28,13 @@ type Transactions struct {
 type Transaction struct {
 	Base              `valid:"required"`
 	AccountFrom       *Account `valid:"-"`
-	Amount            float64  `json:"ammount" valid:"notnull"`
+	AccountFromID     string   `gorm:"column:account_from_id;type:uuid;" valid:"notnull"`
+	Amount            float64  `gorm:"type:float" json:"ammount" valid:"notnull"`
 	PixKeyTo          *PixKey  `valid:"-"`
-	Status            string   `json:"status" valid:"notnull"`
-	Description       string   `json:"description" valid:"notnull"`
-	CancelDescription string   `json:"cancel_description" valid:"-"`
+	PixKeyToId        string   `gorm:"column:pix_key_id_to;type:uuid;" valid:"notnull"`
+	Status            string   `gorm:"type:varchar(20)" json:"status" valid:"notnull"`
+	Description       string   `gorm:"type:varchar(255)" json:"description" valid:"notnull"`
+	CancelDescription string   `gorm:"type:varchar(255)" json:"cancel_description" valid:"-"`
 }
 
 func (t *Transaction) isValid() error {
