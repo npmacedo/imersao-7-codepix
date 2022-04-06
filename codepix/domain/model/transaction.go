@@ -16,7 +16,7 @@ const (
 )
 
 type TransactionRepositoryInterface interface {
-	Register(transaction *Transaction)
+	Register(transaction *Transaction) error
 	Save(transaction *Transaction) error
 	Find(id string) (*Transaction, error)
 }

@@ -11,7 +11,7 @@ type TransactionRepositoryDb struct {
 	Db *gorm.DB
 }
 
-func (r PixKeyRepositoryDb) Register(transaction *model.Transaction) error {
+func (r TransactionRepositoryDb) Register(transaction *model.Transaction) error {
 	err := r.Db.Create(transaction).Error
 	if err != nil {
 		return err
@@ -19,7 +19,7 @@ func (r PixKeyRepositoryDb) Register(transaction *model.Transaction) error {
 	return nil
 }
 
-func (r PixKeyRepositoryDb) Save(transaction *model.Transaction) error {
+func (r TransactionRepositoryDb) Save(transaction *model.Transaction) error {
 	err := r.Db.Save(transaction).Error
 	if err != nil {
 		return err
@@ -27,7 +27,7 @@ func (r PixKeyRepositoryDb) Save(transaction *model.Transaction) error {
 	return nil
 }
 
-func (r PixKeyRepositoryDb) Find(id string) (*model.Transaction, error) {
+func (r TransactionRepositoryDb) Find(id string) (*model.Transaction, error) {
 	var transaction model.Transaction
 
 	r.Db.Preload("Account.Bank").First(&transaction, "id = ?", id)
