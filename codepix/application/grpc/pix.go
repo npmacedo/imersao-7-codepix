@@ -24,7 +24,6 @@ func (p *PixGrpcService) RegisterPixKey(ctx context.Context, in *pb.PixKeyRegist
 	return &pb.PixKeyCreatedResult{
 		Id:     key.ID,
 		Status: "created",
-		Error:  err.Error(),
 	}, nil
 }
 

@@ -14,7 +14,7 @@ type Transaction struct {
 	PixKeyTo     string  `json:"pixKeyTo" validate:"required"`
 	PixKeyKindTo string  `json:"pixKeyKindTo" validate:"required"`
 	Description  string  `json:"description" validate:"required"`
-	Status       string  `json:"status" validate:"required"`
+	Status       string  `json:"status" validate:"-"`
 	Error        string  `json:"error"`
 }
 
@@ -22,7 +22,7 @@ func (t *Transaction) isValid() error {
 	v := validator.New()
 	err := v.Struct(t)
 	if err != nil {
-		fmt.Errorf("Error during Transaction validation: %s", err.Error())
+		fmt.Printf("Error during Transaction validation: %s", err.Error())
 		return err
 	}
 	return nil

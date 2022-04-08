@@ -54,12 +54,12 @@ func (k *KafkaProcessor) Consume() {
 
 func (k *KafkaProcessor) processMessage(msg *ckafka.Message) {
 	transactionsTopic := "transactions"
-	transactionsConfirmationTopic := "transaction_confirmation"
+	transactionConfirmationTopic := "transaction_confirmation"
 
-	switch topic := *&msg.TopicPartition.Topic; topic {
-	case &transactionsTopic:
+	switch topic := *msg.TopicPartition.Topic; topic {
+	case transactionsTopic:
 		k.processTransaction(msg)
-	case &transactionsConfirmationTopic:
+	case transactionConfirmationTopic:
 		k.processTransactionConfirmation(msg)
 	default:
 		fmt.Println("not a valid topic", string(msg.Value))
@@ -81,8 +81,8 @@ func (k *KafkaProcessor) processTransaction(msg *ckafka.Message) error {
 		transaction.PixKeyTo,
 		transaction.PixKeyKindTo,
 		transaction.Description,
+		transaction.ID,
 	)
-
 	if err != nil {
 		fmt.Println("Error registering transaction", err)
 		return err

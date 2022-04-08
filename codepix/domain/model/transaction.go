@@ -33,7 +33,7 @@ type Transaction struct {
 	PixKeyTo          *PixKey  `valid:"-"`
 	PixKeyToId        string   `gorm:"column:pix_key_id_to;type:uuid;" valid:"notnull"`
 	Status            string   `gorm:"type:varchar(20)" json:"status" valid:"notnull"`
-	Description       string   `gorm:"type:varchar(255)" json:"description" valid:"notnull"`
+	Description       string   `gorm:"type:varchar(255)" json:"description" valid:"-"`
 	CancelDescription string   `gorm:"type:varchar(255)" json:"cancel_description" valid:"-"`
 }
 
@@ -58,23 +58,27 @@ func (t *Transaction) isValid() error {
 	return nil
 }
 
-func NewTransaction(accountFrom *Account, amount float64, pixKeyTo *PixKey, description string) (*Transaction, error) {
+func NewTransaction(accountFrom *Account, amount float64, pixKeyTo *PixKey, description string, id string) (*Transaction, error) {
+
 	transaction := Transaction{
-		AccountFrom: accountFrom,
-		Amount:      amount,
-		PixKeyTo:    pixKeyTo,
-		Status:      TransactionPending,
-		Description: description,
+		AccountFrom:   accountFrom,
+		AccountFromID: accountFrom.ID,
+		Amount:        amount,
+		PixKeyTo:      pixKeyTo,
+		PixKeyToId:    pixKeyTo.ID,
+		Status:        TransactionPending,
+		Description:   description,
 	}
-
-	transaction.ID = uuid.NewV4().String()
+	if id == "" {
+		transaction.ID = uuid.NewV4().String()
+	} else {
+		transaction.ID = id
+	}
 	transaction.CreatedAt = time.Now()
-
 	err := transaction.isValid()
 	if err != nil {
 		return nil, err
 	}
-
 	return &transaction, nil
 }
 
