@@ -11,6 +11,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { join } from 'path';
 import { TransactionsController } from './controllers/transactions/transactions.controller';
 import { Transaction } from './models/transaction.model';
+import { TransactionSubscriber } from './subscribers/transaction-subscriber/transaction-subscriber.service';
 
 @Module({
   imports: [
@@ -50,6 +51,6 @@ import { Transaction } from './models/transaction.model';
     }])
   ],
   controllers: [BankAccountController, PixKeyController, TransactionsController],
-  providers: [FixtureCommand],
+  providers: [FixtureCommand, TransactionSubscriber],
 })
 export class AppModule {}
