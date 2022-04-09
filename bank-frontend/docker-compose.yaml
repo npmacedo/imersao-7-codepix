@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  bank-front:
+    build: .
+    entrypoint: .docker/entrypoint.sh 
+    ports:
+      - 3001:3000
+    volumes: 
+      - .:/home/node/app
+    extra_hosts: 
+      - "host.docker.internal:172.17.0.1"
+    environment:
+      - NEXT_PUBLIC_NEST_API_URL=http://host.docker.internal:8001/api
